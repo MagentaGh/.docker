@@ -1,0 +1,36 @@
+ version: "3.2"
+ name: ubuntu
+
+ services:
+   mysql:
+     image: mysql:8.0.36-debian
+   networks:
+     coffee:
+       ipv4_address: 172.16.0.83
+   environment:
+      MYSQL_ROOT_PASSWORD: password
+   volumes:
+     - data:/var/lib/mysql
+
+   apache:
+     image: ubuntu/apache2
+     volumes:
+       - data:/etc/apache2/
+     environment:
+       - TZ:UTC
+     port:
+       - "8089:80"
+
+
+ volumes:
+   date:
+     external: true
+
+ networks:
+   coffee:
+     ipam:
+       driver: macvlan
+       config:
+         - subnet: 172.16.0.0/24
+
+
